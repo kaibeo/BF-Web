@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tier BF - Ranking System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0a0a0a; /* Đen sâu */
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        /* Hiệu ứng vàng Gold */
+        .gold-text {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        .gold-border {
+            border: 1px solid #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+        .rank-card {
+            transition: transform 0.3s ease;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .rank-card:hover {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.07);
+        }
+        /* Avatar tròn hiệu ứng gold cho hạng 1 */
+        .top-1-avatar {
+            border: 3px solid #d4af37;
+            filter: drop-shadow(0 0 10px #d4af37);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+    <div class="text-center mb-12">
+        <h1 class="text-4xl uppercase tracking-widest gold-text">Tier BF Ranking</h1>
+        <p class="text-gray-500 mt-2 text-sm uppercase">Hệ thống xếp hạng sức mạnh tự động</p>
+    </div>
+
+    <div class="max-w-4xl mx-auto space-y-4">
+        
+        <div class="rank-card gold-border rounded-xl p-6 flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <span class="text-3xl gold-text italic">#1</span>
+                <img id="avatar-1" src="https://tr.rbxcdn.com/30DAY-Avatar-0997B28B3654AD21831885D56A495689-Png/150/150/Avatar/Webp/NoFilter" 
+                     alt="Avatar" class="w-20 h-20 rounded-full top-1-avatar">
+                <div>
+                    <h2 class="text-xl font-bold text-white uppercase tracking-tighter" id="name-1">Loading...</h2>
+                    <span class="px-3 py-1 bg-yellow-900/30 text-yellow-500 border border-yellow-700 rounded-full text-xs">GOD TIER (OT-1)</span>
+                </div>
+            </div>
+            <div class="hidden md:block text-right">
+                <p class="text-xs text-gray-500 italic">"Kẻ thống trị bảng xếp hạng"</p>
+            </div>
+        </div>
+
+        <div id="ranking-list" class="space-y-3">
+            </div>
+
+    </div>
+
+    <script>
+        // Danh sách mẫu (Trong thực tế bạn sẽ lấy từ Database của mình)
+        const players = [
+            { userId: 1, tier: 'HT-1', score: 9800 },
+            { userId: 156, tier: 'HT-5', score: 8500 },
+            { userId: 200, tier: 'MT-1', score: 7200 },
+            { userId: 450, tier: 'LT-1', score: 5000 }
+        ];
+
+        // Hàm gọi API Roblox để lấy Username và Avatar
+        async function loadPlayerData() {
+            const listContainer = document.getElementById('ranking-list');
+            
+            // Ví dụ cho hạng 1 (UserId giả định)
+            const top1Id = 17266851; // Thay bằng UserId thật
+            document.getElementById('name-1').innerText = "Player_Top1";
+            document.getElementById('avatar-1').src = `https://thumbnails.roblox.com/v1/users/avatar?userIds=${top1Id}&size=150x150&format=Png&isCircular=true`;
+
+            // Render các hạng còn lại
+            players.forEach((player, index) => {
+                const row = `
+                    <div class="rank-card border border-white/10 rounded-lg p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <span class="text-lg text-gray-400 w-8">#${index + 2}</span>
+                            <img src="https://thumbnails.roblox.com/v1/users/avatar?userIds=${player.userId}&size=150x150&format=Png&isCircular=true" 
+                                 class="w-12 h-12 rounded-full border border-gray-700">
+                            <div>
+                                <h3 class="text-white font-medium">User_${player.userId}</h3>
+                                <span class="text-[10px] text-gray-500 uppercase">${player.tier}</span>
+                            </div>
+                        </div>
+                        <div class="text-gold-text font-mono">${player.score} PTS</div>
+                    </div>
+                `;
+                listContainer.innerHTML += row;
+            });
+        }
+
+        loadPlayerData();
+    </script>
+</body>
+</html>
